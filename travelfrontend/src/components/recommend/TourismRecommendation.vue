@@ -48,8 +48,8 @@ export default {
   methods: {
     fetchData() {
       api
-        //.post("/recommend/getData")
-        .post("/scrape/places")
+        .post("/recommend/getData",{})
+        //.post("/scrape/places")
         .then((response) => {
           this.gone = response.data;
           this.updateCharts();

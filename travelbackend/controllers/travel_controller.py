@@ -5,7 +5,7 @@ from services.travel_service import TravelService
 
 scraper_bp = Blueprint('travel', __name__, url_prefix='/travel')
 travelService=TravelService()
-@scraper_bp.route('/scrape/places', methods=['GET'])
+@scraper_bp.route('/scrape/places', methods=['POST'])
 def scrapePlaces():
     travelService.get_place(url=request.args.get('url'))
     return jsonify({'message': 'Data scraped successfully!'})

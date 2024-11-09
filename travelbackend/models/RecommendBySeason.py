@@ -1,6 +1,7 @@
 # app/models.py
+from extensions import db
 class RecommendBySeason(db.Model):
-    __tablename__ = 'recommend_by_season'
+    __tablename__ = 'recommendseason'
 
     id = db.Column(db.Integer, primary_key=True)  # Assuming an ID as the primary key
     season = db.Column(db.String(50), nullable=False)

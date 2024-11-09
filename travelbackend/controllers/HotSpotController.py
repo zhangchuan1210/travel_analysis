@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify
 from ..models import ProvinceHot, SightDetails
 from .. import db
 
-hotspot_blueprint = Blueprint('hotspot', __name__)
+hotspot_blueprint = Blueprint('hotspot', __name__,url_prefix='/api/travel')
 
 @hotspot_blueprint.route('/hotspot', methods=['GET'])
 def get_province_hot():
