@@ -1,9 +1,10 @@
 import json
-import services.SightPriceService
-
+import services.SightPriceService as SightPriceService
+import services.CityService as CityService
+import services.ProvinceHotService as ProvinceService
 def get_tickets():
     # Process sightseeing prices
-    price_list = new SightPriceService().list_all()
+    price_list = SightPriceService.list_all_sight_prices()
     prices = []
     for sight_price in price_list:
         price_map = {
@@ -13,7 +14,7 @@ def get_tickets():
         prices.append(price_map)
 
     # Process city geographic locations
-    city_list = cityService.list_all()
+    city_list = CityService.list_all_cities()
     city_map = {}
     for city in city_list:
         loc = [city.lng, city.lat]
@@ -21,7 +22,7 @@ def get_tickets():
     city_json = json.dumps(city_map)
 
     # Process sightseeing popularity data
-    province_hot_list = provinceHotService.list_all()
+    province_hot_list = ProvinceService.list_all_province_hot()
     data_list = []
     for province_hot in province_hot_list:
         province_hot_map = {
@@ -32,7 +33,7 @@ def get_tickets():
 
     # Price range statistics data
     price_sql = "SELECT avg_price FROM sight_price WHERE city <> '山南'"
-    price_num = sightPriceService.get_by_sql_return_price(price_sql)
+    price_num = SightPriceService.get_prices_by_sql(price_sql)
 
     # Count of cities by price ranges
     count_ranges_sql = [
@@ -44,7 +45,7 @@ def get_tickets():
     ]
     count_list = []
     for tag, sql in count_ranges_sql:
-        count = sightPriceService.get_count(sql)
+        count = SightPriceService.get_count_by_sql(sql)
         count_map = {
             "name": tag,
             "value": count
@@ -59,3 +60,4 @@ def get_tickets():
         "cityJson": city_json,
         "prices": prices
     }
+    return context

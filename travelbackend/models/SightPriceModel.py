@@ -1,5 +1,7 @@
 # app/models.py
-class SightPrice(db.Model):
+from extensions import db
+
+class SightPriceModel(db.Model):
     __tablename__ = 'sight_price'
 
     id = db.Column(db.Integer, primary_key=True)  # Assuming an ID as the primary key

@@ -1,4 +1,6 @@
 # app/models.py
+from extensions import db
+
 class Sight(db.Model):
     __tablename__ = 'sight'
 

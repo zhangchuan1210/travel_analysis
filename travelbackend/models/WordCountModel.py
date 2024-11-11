@@ -1,4 +1,6 @@
 # app/models.py
+from extensions import db
+
 class WordCount(db.Model):
     __tablename__ = 'word_count'
 

@@ -1,5 +1,7 @@
 # app/models.py
-class ProvinceHot(db.Model):
+from extensions import db
+
+class ProvinceHotModel(db.Model):
     __tablename__ = 'province_hot'
 
     id = db.Column(db.Integer, primary_key=True)  # Assuming an ID as the primary key

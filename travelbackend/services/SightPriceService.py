@@ -1,13 +1,13 @@
 # app/services/sight_price_service.py
-from ..models import SightPrice
-from .. import db
+from models.SightPriceModel import SightPriceModel
+from extensions import db
 from sqlalchemy.sql import text
 
 def list_all_sight_prices():
     """
     Fetch all records from the SightPrice table.
     """
-    return db.session.query(SightPrice).all()
+    return db.session.query(SightPriceModel).all()
 
 def get_prices_by_sql(sql):
     """

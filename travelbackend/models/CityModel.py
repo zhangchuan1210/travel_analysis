@@ -1,7 +1,7 @@
 # app/models.py
-from . import db
+from extensions import db
 
-class City(db.Model):
+class CityModel(db.Model):
     __tablename__ = 'city'
 
     id = db.Column(db.Integer, primary_key=True)  # Assuming an ID as the primary key

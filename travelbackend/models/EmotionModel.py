@@ -1,4 +1,5 @@
 # app/models.py
+from extensions import db
 class Emotion(db.Model):
     __tablename__ = 'emotion'
 
