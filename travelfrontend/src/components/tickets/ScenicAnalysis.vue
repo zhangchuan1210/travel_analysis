@@ -17,24 +17,45 @@
 
 <script>
 import * as echarts from 'echarts';
+import api from "@/api";
 
 export default {
   name: 'ScenicAnalysis',
-  props: {
-    countList: Array,
-    prices: Array,
-    datalist: Array,
-    cityJson: Object,
-    priceNum: Array
+  data() {
+      return {
+        localData: {
+          countList: [],
+          prices: [],
+          dataList: [],
+          cityJson: {},
+          priceNum: 0,
+        },
+      };
   },
   mounted() {
-    this.initCharts();
+    this.fetchData();
   },
   methods: {
+     fetchData() {
+      api
+        .get("/tickets/listtickets")
+        .then((response) => {
+          this.localData.countList = response.data.countList;
+          this.localData.prices = response.data.prices;
+          this.localData.countList = response.data.countList;
+          this.localData.datalist = response.data.datalist;
+          this.localData.cityJson = response.data.cityJson;
+          this.localData.priceNum = response.data.priceNum;
+          this.initCharts();
+        })
+        .catch((error) => {
+          console.error("Failed to fetch data", error);
+        });
+    },
     initCharts() {
       // Pie Chart
       const chart1 = echarts.init(this.$refs.chart1);
-      const pieData = this.countList.map((item) => ({
+      const pieData = this.localData.countList.map((item) => ({
         name: `${item.name}￥`,
         value: item.value
       }));
@@ -66,17 +87,17 @@ export default {
 
       // Heat Map
       const chart2 = echarts.init(this.$refs.chart2);
-      const heatMapData = this.prices.map((item) => ({
+      const heatMapData = this.localData.prices.map((item) => ({
         name: item.name,
         value: item.value
       }));
-      const geoCoordMap = this.cityJson;
+      const geoCoordMap = this.localData.cityJson;
 
       const convertData = (data) =>
         data
           .map((item) => ({
             name: item.name,
-            value: [...geoCoordMap[item.name], item.value]
+            value: [geoCoordMap[item.name] || [0,0], item.value]
           }))
           .filter((item) => item.value);
 
@@ -110,13 +131,19 @@ export default {
           }
         ]
       };
-      chart2.setOption(heatMapOption);
+      try {
+          //chart2.registerMap('china', chinaMap);
+          chart2.setOption(heatMapOption);}
+      catch (error) {
+          console.error("Map data error:", error);
+      }
+
 
       // Scatter Chart
       const chart3 = echarts.init(this.$refs.chart3);
-      const scatterData = this.priceNum.map((item) => [
-        item.avg_price,
-        item.avg_price
+      const scatterData = this.localData.priceNum.map((item) => [
+        item,
+        item
       ]);
 
       const scatterOption = {

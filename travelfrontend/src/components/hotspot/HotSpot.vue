@@ -13,18 +13,35 @@
 
 <script>
 import * as echarts from 'echarts';
+import api from "@/api";
 
 export default {
   name: 'HotSpot',
-  props: {
-    datalist: { type: Array, default: () => [] },
-    maps: { type: Array, default: () => [] },
+  data() {
+      return {
+        localData: {
+         datalist: { type: Array, default: () => [] },
+         maps: { type: Array, default: () => [] },
+        },
+      };
   },
   mounted() {
-    this.initHeatMapChart();
-    this.initBarChart();
+
   },
   methods: {
+      fetchData() {
+      api
+        .get("/hotspot/listhotspot")
+        .then((response) => {
+          this.localData.datalist = response.data.datalist;
+          this.localData.maps = response.data.maps;
+          this.initHeatMapChart();
+          this.initBarChart();
+        })
+        .catch((error) => {
+          console.error("Failed to fetch data", error);
+        });
+    },
     // 初始化中国各省旅游热度热力图
     initHeatMapChart() {
       const heatMapChart = echarts.init(this.$refs.heatMapChart);
@@ -64,7 +81,7 @@ export default {
               normal: { show: true },
               emphasis: { show: true }
             },
-            data: this.datalist.map((item) => ({ name: item.name, value: item.value }))
+            data: this.localData.datalist.map((item) => ({ name: item.name, value: item.value }))
           }
         ]
       };
@@ -74,7 +91,7 @@ export default {
     // 初始化国内城市热门景点数柱状图
     initBarChart() {
       const barChart = echarts.init(this.$refs.barChart);
-      const filteredMaps = this.maps.filter(item => item.value >= 16);
+      const filteredMaps = this.localData.maps.filter(item => item.value >= 16);
       const barChartOption = {
         title: {
           text: '国内城市热门景点数柱状图',
